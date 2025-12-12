@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 const router = express.Router()
+app.use(router);
 app.get('/', (req, res, next) => {
 	res.status(200).json("You are home")
 })
