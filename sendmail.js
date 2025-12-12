@@ -1,6 +1,6 @@
 const { Resend } = require('resend')
 
-const resend  = new Resend('re_CS4H3Mre_9RhtgCas4W8wmE1PGgszfGJW' || process.env.RESEND_KEY);
+const resend  = new Resend( process.env.RESEND_KEY);
 
 async function sendMail(obj) {
 	try {
