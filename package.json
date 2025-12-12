@@ -21,6 +21,7 @@
   "dependencies": {
     "bullmq": "^5.66.0",
     "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "ioredis": "^5.8.2",
     "resend": "^6.6.0"
   }
