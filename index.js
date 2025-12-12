@@ -42,8 +42,6 @@ worker.on('completed', () => {
 	console.log("Emails sent");
 })
 
-
-
 // keep service alive with cron job
 const port = process.env.PORT;
-app.listen(() => {console.log('service live...');}, port);
+app.listen(port, () => {console.log('service live...');});
