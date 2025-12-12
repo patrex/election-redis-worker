@@ -3,16 +3,6 @@ require('dotenv').config();
 const processor = require('./processor')
 const Redis = require('ioredis')
 
-const express = require('express');
-const app = express();
-app.use(express.json());
-
-const router = express.Router()
-app.use(router);
-app.get('/', (req, res, next) => {
-	res.status(200).json("You are home")
-})
-
 const connectionOptns = {
 	host: process.env.REDIS_URL,
 	port: parseInt(process.env.REDIS_PORT, 10),
@@ -43,6 +33,3 @@ worker.on('completed', () => {
 	console.log("Emails sent");
 })
 
-// keep service alive with cron job
-const port = process.env.PORT;
-app.listen(port, () => {console.log('service live...');});
