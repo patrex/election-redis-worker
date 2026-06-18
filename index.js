@@ -4,11 +4,7 @@ const processor = require('./processor')
 const Redis = require('ioredis')
 
 const connectionOptns = {
-	host: 'redis-15612.c1.us-central1-2.gce.cloud.redislabs.com' || process.env.REDIS_URL,
-	port: 15612 || parseInt(process.env.REDIS_PORT, 10),
-	username: 'default',
-	password: 'FH3xE7ItoIx0U2fgsXcA0iJiBDTmbue7' || process.env.REDIS_PASSWORD,
-	maxRetriesPerRequest: null
+
 }
 
 const connection = new Redis(connectionOptns)
