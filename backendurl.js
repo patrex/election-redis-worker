@@ -1,0 +1,1 @@
+module.exports = 'https://election-backend-kduj.onrender.com';

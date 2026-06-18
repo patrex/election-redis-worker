@@ -1,19 +1,26 @@
-const sendMail = require('./sendmail');
+const backendurl = require('./backendurl');
 
 const processor = async (job) => {
 	if (job.name === 'sendResults') {
-		console.log(`Processing results for election: ${job.data.id}`);
-		
-		const mailResult = await sendMail({
-		    from: 'onboarding@resend.dev',
-		    to: 'patsoks.sokari@gmail.com',
-		    subject: "Results for Election: " + job.data.id,
-		    body: "<strong>Test Mail - Election Results Notification</strong>"
-		});
-		
-		if (!mailResult.success) {
-		    throw new Error(`Email failed to send for job ${job.id}: ${mailResult.error}`);
-		}
+		const mailReq = await fetch(`${backendurl}/emails/push-results`, {
+			method: 'POST',
+			body: JSON.stringify({ electionId: job.data.id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+
+		if (!mailReq.ok) throw new Error("The request failed in mailReq processor")
+	} else if (job.name === 'sendVerificationEmail') {
+		const verificationReq = await fetch(`${backendurl}/emails/push-email-verification`, {
+			method: "POST",
+			body: JSON.stringify({ mail: job.data.email}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+
+		if (!verificationReq) throw new Error("Email verification failed in processor")
 	}
 }
 

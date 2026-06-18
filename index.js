@@ -4,10 +4,10 @@ const processor = require('./processor')
 const Redis = require('ioredis')
 
 const connectionOptns = {
-	host: process.env.REDIS_URL,
-	port: parseInt(process.env.REDIS_PORT, 10),
+	host: 'redis-15612.c1.us-central1-2.gce.cloud.redislabs.com' || process.env.REDIS_URL,
+	port: 15612 || parseInt(process.env.REDIS_PORT, 10),
 	username: 'default',
-	password: process.env.REDIS_PASSWORD,
+	password: 'FH3xE7ItoIx0U2fgsXcA0iJiBDTmbue7' || process.env.REDIS_PASSWORD,
 	maxRetriesPerRequest: null
 }
 
@@ -21,15 +21,28 @@ connection.on('error', (err) => {
 	}
 });
 
-const worker = new Worker('resultsNotifications', processor, {
+const resultWorker = new Worker('resultsNotifications', processor, {
 	connection: connectionOptns,
 	concurrency: 5
 })
 
-worker.on('failed', () => {
-	console.error("Email sending failed");
-})
-worker.on('completed', () => {
-	console.log("Emails sent");
+const sendVerificationWorker = new Worker('emailVerifications', processor, {
+	connection: connectionOptns,
+	concurrency: 5
 })
 
+sendVerificationWorker.on('failed', () => {
+	console.log('Email verification invitation failed');
+})
+
+sendVerificationWorker.on('completed', () => {
+	console.log('Email verification invitation sent');
+})
+
+resultWorker.on('failed', () => {
+	console.error("Could not send result email");
+})
+
+resultWorker.on('completed', () => {
+	console.log("Results email sent");
+})
